@@ -21,7 +21,7 @@ import { DownloadLog } from './entities/download-log.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, File, ShareLink, DownloadLog],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
     AuthModule,
     FilesModule,
