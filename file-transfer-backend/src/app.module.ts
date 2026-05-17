@@ -27,7 +27,8 @@ import { DownloadLog } from './entities/download-log.entity';
       database: !process.env.DATABASE_URL ? process.env.DB_NAME : undefined,
       
       entities: [User, File, ShareLink, DownloadLog],
-      synchronize: process.env.NODE_ENV !== 'production',
+      // synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       
       // 3. Render's managed PostgreSQL requires SSL connections in production
       ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
