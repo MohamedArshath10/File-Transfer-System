@@ -29,13 +29,12 @@ export class ShareService {
       ? new Date(Date.now() + options.expiresIn * 60 * 60 * 1000)
       : null;
 
-    const link = this.shareLinkRepo.create({
-      file,
-      token,
-      password: hashedPassword,
-      expires_at: expiresAt,
-      max_downloads: options.maxDownloads || null,
-    });
+    const link = new ShareLink();
+    link.file = file;
+    link.token = token;
+    link.password = hashedPassword;
+    link.expires_at = expiresAt;
+    link.max_downloads = options.maxDownloads || null;
 
     return this.shareLinkRepo.save(link);
   }

@@ -36,7 +36,7 @@ export class ShareController {
     @Body() body: { password?: string },
     @Ip() ip: string,
   ) {
-    return this.shareService.verifyAndDownload(token, body.password, ip);
+    return this.shareService.verifyAndDownload(token, body.password ?? '', ip);
   }
 
   @Delete(':id')

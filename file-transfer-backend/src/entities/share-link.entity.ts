@@ -5,32 +5,33 @@ import { DownloadLog } from './download-log.entity';
 @Entity('share_links')
 export class ShareLink {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
-  @ManyToOne(() => File, file => file.shareLinks)
-  file: File;
+  @ManyToOne(() => File, file => file.shareLinks, {onDelete: 'CASCADE'})
+  file!: File;
+  
 
   @Column({ unique: true })
-  token: string;
+  token!: string;
 
-  @Column({ nullable: true })
-  password: string;
+  @Column({ nullable: true, type: 'varchar' })
+  password!: string | null;
 
-  @Column({ nullable: true })
-  expires_at: Date;
+  @Column({ nullable: true, type: 'timestamp' })
+  expires_at!: Date | null;
 
   @Column({ default: 0 })
-  download_count: number;
+  download_count: number = 0;
 
-  @Column({ nullable: true })
-  max_downloads: number;
+  @Column({ nullable: true, type: 'int' })
+  max_downloads!: number | null;
 
   @Column({ default: true })
-  is_active: boolean;
+  is_active: boolean = true;
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at!: Date;
 
   @OneToMany(() => DownloadLog, log => log.shareLink)
-  downloadLogs: DownloadLog[];
+  downloadLogs!: DownloadLog[];
 }
