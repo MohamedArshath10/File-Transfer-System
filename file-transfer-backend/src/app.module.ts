@@ -14,14 +14,23 @@ import { DownloadLog } from './entities/download-log.entity';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: +(process.env.DB_PORT ?? '3306'),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      type: 'postgres',
+      
+      // 1. Prioritize Render's unified connection string if it exists
+      url: process.env.DATABASE_URL,
+      
+      // 2. Fallback to separate variables for your local machine testing
+      host: !process.env.DATABASE_URL ? process.env.DB_HOST : undefined,
+      port: !process.env.DATABASE_URL ? +(process.env.DB_PORT ?? '5432') : undefined, // PostgreSQL default is 5432
+      username: !process.env.DATABASE_URL ? process.env.DB_USERNAME : undefined,
+      password: !process.env.DATABASE_URL ? process.env.DB_PASSWORD : undefined,
+      database: !process.env.DATABASE_URL ? process.env.DB_NAME : undefined,
+      
       entities: [User, File, ShareLink, DownloadLog],
       synchronize: process.env.NODE_ENV !== 'production',
+      
+      // 3. Render's managed PostgreSQL requires SSL connections in production
+      ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     }),
     AuthModule,
     FilesModule,
